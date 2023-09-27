@@ -1,0 +1,193 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>cookie参数的使用 | Gridea</title>
+<link rel="shortcut icon" href="https://somebodystark.github.io/favicon.ico?v=1695815481153">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://somebodystark.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="cookie参数的使用 | Gridea - Atom Feed" href="https://somebodystark.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="import requests
+url=&quot;https://github.com/somebodystark&quot;
+proxy = {
+'http': 'http://127.0.0.1:7890',
+'https': 'ht..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://somebodystark.github.io">
+  <img class="avatar" src="https://somebodystark.github.io/images/avatar.png?v=1695815481153" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              cookie参数的使用
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-09-18
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <p>import requests</p>
+<p>url=&quot;https://github.com/somebodystark&quot;<br>
+proxy = {<br>
+'http': 'http://127.0.0.1:7890',<br>
+'https': 'http://127.0.0.1:7890'<br>
+}<br>
+headers={<br>
+'User-Agent':<br>
+'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36'<br>
+}</p>
+<h1 id="构建cookie字典-注意点-此处temp的内容不能够换行">构建cookie字典  注意点 此处temp=的内容不能够换行</h1>
+<p>temp='''_octo=GH1.1.757463868.1694914867; _device_id=71739741d200ae235799118044c6f885; user_session=ENJktKVIPuHnKlzNYH44h2-LQ7HVqxOLaAr38BN_udiwhLzm; __Host-user_session_same_site=ENJktKVIPuHnKlzNYH44h2-LQ7HVqxOLaAr38BN_udiwhLzm; logged_in=yes; dotcom_user=somebodystark; has_recent_activity=1; color_mode=%7B%22color_mode%22%3A%22auto%22%2C%22light_theme%22%3A%7B%22name%22%3A%22light%22%2C%22color_mode%22%3A%22light%22%7D%2C%22dark_theme%22%3A%7B%22name%22%3A%22dark%22%2C%22color_mode%22%3A%22dark%22%7D%7D; preferred_color_mode=light; tz=Asia%2FShanghai; _gh_sess=tHGO8YoGGTNCjcDppRNGtjrhcBeTPJzoROGPekvnIyBZG3U%2BFpD77HGrKuG63K1QIatxow8g%2BE17OgVIoVNW%2BNZi7X71tVmrjfsHwOufbOwHVMm%2BpiHMWfB8ScAYo72OMEitai53uzodb%2F1qbSKuaS01C3aOk4kc%2BMCefu5NdcRKlEppwaPzGIYdXG4WN5OnoGw%2BqhwPecIqa0FOrP1KBRaEzvDCuKWmFSK9zBqZHlmEM8LyhNl4P2lRi19VufQcxgRp2OQmzsoxlRu4J0JGNah3JHA8IKH3XOzXt5987a0%3D--dwqBD%2BfI9gzP%2Fpoq--G91FqY04hvWC9ngAfrnRhA%3D%3D'''</p>
+<h1 id="稳妥方案">稳妥方案</h1>
+<p>cookie_list =temp.split(&quot;; &quot;)  按照； 进行分割，将每个cookie分割成一个列表<br>
+cookies ={}  初始化一个空的字典cookies，用于储存解析后的cookie<br>
+for cookie in cookie_list:  遍历cookie_list列表中的每个cookie<br>
+cookies[cookie.split('=')[0]]=cookie.split('=')[-1] 通过等号进行分割，将每个cookie分割成名称和值，cookie.split('=')[0]为名称，cookie.split('=')[-1]是值，名称为字典的键，值为字典的值，将cookie存储到cookies字典中  索引[-1]表示获取列表中的最后一个元素<br>
+print(cookies)</p>
+<p>response = requests.get(url,headers=headers,cookies=cookies,proxies=proxy)</p>
+<p>with open(&quot;github_with_cookies2.html&quot;,&quot;wb&quot;)as f:<br>
+f.write(response.content)</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E6%9E%84%E5%BB%BAcookie%E5%AD%97%E5%85%B8-%E6%B3%A8%E6%84%8F%E7%82%B9-%E6%AD%A4%E5%A4%84temp%E7%9A%84%E5%86%85%E5%AE%B9%E4%B8%8D%E8%83%BD%E5%A4%9F%E6%8D%A2%E8%A1%8C">构建cookie字典  注意点 此处temp=的内容不能够换行</a></li>
+<li><a href="#%E7%A8%B3%E5%A6%A5%E6%96%B9%E6%A1%88">稳妥方案</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://somebodystark.github.io/post/zai-qing-qiu-tou-zhong-xi-dai-cookie/">
+              <h3 class="post-title">
+                在请求头中携带cookie
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://somebodystark.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

